@@ -1,0 +1,33 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: micro-backend
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: micro-backend
+    spec:
+      container:
+      - name: micro-backend
+      image: [Docker username]/micro-backend:latest
+      ports:
+      - containerPort: 80
+      env:
+      - name: ASPNETCORE_URLS
+        value: http://*5902
+  selectors:
+    matchLabels:
+      app: micro-backend
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: micro-backend
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+selector:
+  app: micro-backend
